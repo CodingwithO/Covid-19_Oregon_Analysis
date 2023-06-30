@@ -20,13 +20,15 @@ import plotly.express as px
 # In[2]:
 
 
-confirmed_df = pd.read_csv('COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
+confirmed_df = pd.read_csv(confirmed_df = pd.read_csv('C:/Users/ogbom/COVID-19_Dashboard_Project/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
+)
 
 
 # In[3]:
 
 
-deaths_df = pd.read_csv('COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv')
+deaths_df = pd.read_csv(confirmed_df = pd.read_csv('C:/Users/ogbom/COVID-19_Dashboard_Project/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
+)
 
 
 # We load the data related to confirmed cases and deaths from the respective CSV files.
@@ -259,7 +261,7 @@ def update_graph(metric, date):
     return fig
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, host='0.0.0.0', port=8050)
 
 
 # The next section is dedicated to preparing our data and building an interactive dashboard using Dash, a productive Python framework for building web applications. This will allow users to view the COVID-19 data dynamically based on their chosen parameters.
