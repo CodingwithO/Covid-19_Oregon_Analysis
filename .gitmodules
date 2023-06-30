@@ -1,4 +1,1 @@
-[submodule "COVID-19"]
-	path = COVID-19
-	url = https://github.com/CodingwithO/COVID-19.git
-
+[submodule]
