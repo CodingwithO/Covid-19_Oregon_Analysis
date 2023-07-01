@@ -20,15 +20,15 @@ import plotly.express as px
 # In[2]:
 
 
-confirmed_df = pd.read_csv(confirmed_df = pd.read_csv('C:/Users/ogbom/COVID-19_Dashboard_Project/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
-)
+confirmed_df = pd.read_csv('C:/Users/ogbom/COVID-19_Dashboard_Project/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
+
 
 
 # In[3]:
 
 
-deaths_df = pd.read_csv(confirmed_df = pd.read_csv('C:/Users/ogbom/COVID-19_Dashboard_Project/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
-)
+deaths_df = pd.read_csv('C:/Users/ogbom/COVID-19_Dashboard_Project/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
+
 
 
 # We load the data related to confirmed cases and deaths from the respective CSV files.
