@@ -17,6 +17,18 @@ def process_data_chunks(metric, date):
         confirmed_chunk = preprocess_data(confirmed_chunk)
         deaths_chunk = preprocess_data(deaths_chunk)
 
+        print("Columns in confirmed_chunk:")
+        print(confirmed_chunk.columns)
+
+        print("First few rows of confirmed_chunk:")
+        print(confirmed_chunk.head())  # prints first 5 rows
+
+        print("Columns in deaths_chunk:")
+        print(deaths_chunk.columns)
+
+        print("First few rows of deaths_chunk:")
+        print(deaths_chunk.head())  # prints first 5 rows
+
         processed_chunk = merge_data(confirmed_chunk, deaths_chunk)
 
         processed_chunks.append(processed_chunk)
