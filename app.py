@@ -1,19 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
-from data_processing import process_data
 from dash import dcc, html, Dash
 from dash.dependencies import Input, Output
 
 # Import the processed data from data_processing.py
-processed_data = process_data()
-confirmed_df_oregon = processed_data['confirmed']
-deaths_df_oregon = processed_data['deaths']
+from data_processing import process_data_chunks
 
-# Identify the most recent date in the dataset
-most_recent_date = confirmed_df_oregon.columns[-1]
-
-# Create the Dash app
+# Generate the Dash app
 app = Dash(__name__)
 
 # Define app layout
@@ -23,19 +17,19 @@ app.layout = html.Div([
     dcc.Dropdown(
         id='metric-dropdown',
         options=[
-            {'label': 'Total Confirmed Cases', 'value': 'Total Confirmed Cases'},
-            {'label': 'Total Deaths', 'value': 'Total Deaths'}
+            {'label': 'Total Confirmed Cases', 'value': 'confirmed'},
+            {'label': 'Total Deaths', 'value': 'deaths'}
         ],
-        value='Total Confirmed Cases',
+        value='confirmed',
         style={"width": "50%"}
     ),
 
     dcc.DatePickerSingle(
         id='date-picker',
-        min_date_allowed=pd.to_datetime(most_recent_date),
-        max_date_allowed=pd.to_datetime(most_recent_date),
-        initial_visible_month=pd.to_datetime(most_recent_date),
-        date=pd.to_datetime(most_recent_date)
+        min_date_allowed='2023-02-15',
+        max_date_allowed='2023-03-09',
+        initial_visible_month='2023-03-09',
+        date='2023-03-09'
     ),
 
     dcc.Graph(id='covid-graph'),
@@ -48,12 +42,12 @@ app.layout = html.Div([
     Input('date-picker', 'date')
 )
 def update_graph(metric, date):
-    date = pd.to_datetime(date)
-    filtered_df = confirmed_df_oregon[['Admin2', date]].rename(columns={date: 'Value'})
-    fig = px.bar(filtered_df, x='Admin2', y='Value',
-                 hover_data=['Value'],
-                 labels={'Admin2': 'County', 'Value': metric},
-                 title=f'{metric} on {date.strftime("%Y-%m-%d")}')
+    data = process_data_chunks()
+    filtered_df = data[metric]
+    fig = px.bar(filtered_df, x='Admin2', y=date,
+                 hover_data=[date],
+                 labels={'Admin2': 'County', date: metric.capitalize()},
+                 title=f'{metric.capitalize()} on {date}')
     fig.update_layout(autosize=False, width=1000, height=500, xaxis={'categoryorder': 'total descending'})
 
     return fig
