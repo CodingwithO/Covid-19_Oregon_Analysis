@@ -42,11 +42,10 @@ app.layout = html.Div([
     Input('date-picker', 'date')
 )
 def update_graph(metric, date):
-    data = process_data_chunks()
-    filtered_df = data[metric]
-    fig = px.bar(filtered_df, x='Admin2', y=date,
-                 hover_data=[date],
-                 labels={'Admin2': 'County', date: metric.capitalize()},
+    data = process_data_chunks(metric, date)
+    fig = px.bar(data, x='Admin2', y=metric,
+                 hover_data=[metric],
+                 labels={'Admin2': 'County', metric: metric.capitalize()},
                  title=f'{metric.capitalize()} on {date}')
     fig.update_layout(autosize=False, width=1000, height=500, xaxis={'categoryorder': 'total descending'})
 
