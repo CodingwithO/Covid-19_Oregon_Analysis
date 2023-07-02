@@ -1,3 +1,4 @@
-[submodule "COVID-19_assets"]
-	path = COVID-19_assets
-	url = https://github.com/CodingwithO/COVID-19.git
+[submodule "COVID-19_submodule"]
+	path = COVID-19_submodule
+	url = https://github.com/CodingwithO/COVID-19_submodule.git
+
