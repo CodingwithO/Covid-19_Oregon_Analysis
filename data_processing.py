@@ -5,40 +5,30 @@ def process_data_chunks(metric, date):
     directory = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series'
     filename_confirmed = 'time_series_covid19_confirmed_US.csv'
     filename_deaths = 'time_series_covid19_deaths_US.csv'
-    file_path_confirmed = os.path.join(directory, filename_confirmed)
-    file_path_deaths = os.path.join(directory, filename_deaths)
 
-    confirmed_chunks = pd.read_csv(file_path_confirmed, chunksize=1000)
-    deaths_chunks = pd.read_csv(file_path_deaths, chunksize=1000)
+    confirmed_df = read_preprocess_data(directory, filename_confirmed)
+    deaths_df = read_preprocess_data(directory, filename_deaths)
 
-    processed_chunks = []
+    print_dataset_info(confirmed_df, "confirmed")
+    print_dataset_info(deaths_df, "deaths")
 
-    for confirmed_chunk, deaths_chunk in zip(confirmed_chunks, deaths_chunks):
-        confirmed_chunk = preprocess_data(confirmed_chunk)
-        deaths_chunk = preprocess_data(deaths_chunk)
-
-        print("Columns in confirmed_chunk:")
-        print(confirmed_chunk.columns)
-
-        print("First few rows of confirmed_chunk:")
-        print(confirmed_chunk.head())  # prints first 5 rows
-
-        print("Columns in deaths_chunk:")
-        print(deaths_chunk.columns)
-
-        print("First few rows of deaths_chunk:")
-        print(deaths_chunk.head())  # prints first 5 rows
-
-        processed_chunk = merge_data(confirmed_chunk, deaths_chunk)
-
-        processed_chunks.append(processed_chunk)
-
-    processed_df = pd.concat(processed_chunks)
+    if 'Admin2' in confirmed_df.columns and 'Admin2' in deaths_df.columns:
+        processed_df = merge_data(confirmed_df, deaths_df)
+    else:
+        print("Cannot merge dataframes: 'Admin2' column doesn't exist in both dataframes")
+        return None
 
     # Filter dataframe according to the metric and date
     filtered_df = processed_df[processed_df['Date'] == date][['Admin2', metric]]
 
     return filtered_df
+
+def read_preprocess_data(directory, filename):
+    file_path = os.path.join(directory, filename)
+    chunks = pd.read_csv(file_path, chunksize=1000)
+    processed_chunks = [preprocess_data(chunk) for chunk in chunks]
+    df = pd.concat(processed_chunks)
+    return df
 
 def preprocess_data(df):
     df = df[['Admin2'] + list(df.columns[-7:])]
@@ -48,6 +38,13 @@ def preprocess_data(df):
     df.columns = new_columns
 
     return df
+
+def print_dataset_info(df, data_type):
+    print(f"Columns in {data_type}_chunk:")
+    print(df.columns)
+
+    print(f"First few rows of {data_type}_chunk:")
+    print(df.head())  # prints first 5 rows
 
 def merge_data(confirmed_df, deaths_df):
     merged_df = pd.merge(confirmed_df, deaths_df, on='Admin2', suffixes=('_confirmed', '_deaths'))
