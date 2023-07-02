@@ -15,7 +15,8 @@ def process_data_chunks():
 
     for confirmed_chunk, deaths_chunk in zip(confirmed_chunks, deaths_chunks):
         # Perform data processing steps on each chunk
-        # ...
+        confirmed_chunk = preprocess_confirmed_data(confirmed_chunk)
+        deaths_chunk = preprocess_deaths_data(deaths_chunk)
 
         processed_chunk = merge_data(confirmed_chunk, deaths_chunk)
 
@@ -26,6 +27,28 @@ def process_data_chunks():
 
     # Return the processed DataFrame
     return processed_df
+
+def preprocess_confirmed_data(confirmed_df):
+    # Select only the necessary columns
+    confirmed_df = confirmed_df[['Admin2'] + list(confirmed_df.columns[-7:])]
+
+    # Rename columns for readability
+    date_columns = confirmed_df.columns[1:]
+    new_columns = ['Date'] + [pd.to_datetime(col).strftime('%Y-%m-%d') for col in date_columns]
+    confirmed_df.columns = new_columns
+
+    return confirmed_df
+
+def preprocess_deaths_data(deaths_df):
+    # Select only the necessary columns
+    deaths_df = deaths_df[['Admin2'] + list(deaths_df.columns[-7:])]
+
+    # Rename columns for readability
+    date_columns = deaths_df.columns[1:]
+    new_columns = ['Date'] + [pd.to_datetime(col).strftime('%Y-%m-%d') for col in date_columns]
+    deaths_df.columns = new_columns
+
+    return deaths_df
 
 def merge_data(confirmed_df, deaths_df):
     # Merge the confirmed and deaths DataFrames on 'Admin2' to get total confirmed cases and deaths in one DataFrame.
