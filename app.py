@@ -9,6 +9,7 @@ from data_processing import process_data_chunks
 
 # Generate the Dash app
 app = Dash(__name__)
+server = app.server
 
 # Define app layout
 app.layout = html.Div([
